@@ -97,7 +97,7 @@ jobs:
 workflows:
   build_and_deploy:
     jobs:
-      - build:
+      - build
       - deploy-to-aws-s3:
           requires:
             - build
@@ -116,5 +116,7 @@ workflows:
                 - develop
                 - staging
                 - master
+
+
 
 
