@@ -8,8 +8,8 @@ jobs:
     steps: 
       -checkout: 
       -run: 
-        name: Show current branch
-        command: echo ${CURRENT_BRANCH}
+          name: Show current branch
+          command: echo ${CURRENT_BRANCH}
       -restore_cache: 
           keys: 
             - app-{{checksum "package.json"}}
