@@ -8,8 +8,8 @@ jobs:
     steps: 
       -checkout: 
       -run: 
-          name: Show current branch
-          command: echo ${CURRENT_BRANCH}
+        name: Show current branch
+        command: echo ${CURRENT_BRANCH}
       -restore_cache: 
           keys: 
             - app-{{checksum "package.json"}}
@@ -21,16 +21,15 @@ jobs:
           paths: 
             -node_modules
           keys: app-{{checksum "package.json"}}
-
   deploy-to-aws-s3:
-    docker:
+    docker: 
       - image: circleci/node:19.0.1
     working_directory: ~/repo
     steps: 
       -checkout: 
       -run: 
-        name: Show current branch
-        command: echo ${CURRENT_BRANCH}
+          name: Show current branch
+          command: echo ${CURRENT_BRANCH}
       -run: 
           name: Installing AWS CLI
           working_directory: /
