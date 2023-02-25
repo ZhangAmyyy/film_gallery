@@ -1,6 +1,6 @@
 version: 2.1
   
-jobs:
+jobs: 
   build:
     docker:
       - image: circleci/node:19.0.1
