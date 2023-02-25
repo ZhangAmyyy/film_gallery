@@ -1,8 +1,8 @@
 version: 2.1
   
 jobs: 
-  build:
-    docker:
+  build: 
+    docker: 
       - image: circleci/node:19.0.1
     working_directory: ~/repo
     steps: 
@@ -57,7 +57,7 @@ jobs:
             else
               aws --region ${AWS_REGION} s3 sync ~/repo/build s3://${AWS_DEV_BUCKET} --delete
             fi
-  deploy-to-aws-cloudfront:
+  deploy-to-aws-cloudfront: 
     docker: 
       -image: circleci/node:19.0.1
     working_directory: ~/repo
@@ -96,7 +96,7 @@ jobs:
           fi
 
 workflows: 
-  build_and_deploy:
+  build_and_deploy: 
     jobs: 
       - build
       -develop-to-aws-s3: 
