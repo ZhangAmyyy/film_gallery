@@ -7,38 +7,38 @@ jobs:
     working_directory: ~/repo
     steps:
       -checkout
-      -run:
+      -run: 
           name: Show current branch
           command: echo ${CURRENT_BRANCH}
-      -restore_cache:
-          keys:
+      -restore_cache: 
+          keys: 
             -app-{{checksum "package.json"}}
             -app-
-      -run:
+      -run: 
           name: Install dependencies
           command: npm install
-      -save_cache:
-          paths:
+      -save_cache: 
+          paths: 
             -node_modules
           keys:app-{{checksum "package.json"}}
 
   deploy-to-aws-s3:
-    docker:
+    docker: 
       -image: circleci/node: 19.0.1
     working_directory: ~/repo
-    steps:
+    steps: 
       -checkout
       -run: 
           name: Show current branch
           command: echo ${CURRENT_BRANCH}
-      -run:
+      -run: 
           name: Installing AWS CLI
           working_directory: /
           command: |
             sudo apt-get -y -qq update
             sudo apt-get install -y awscli
             sudo apt-get install -y python-pip python-dev build-essential
-      -run:
+      -run: 
           name: Build Project
           command: |
             npm install
@@ -46,7 +46,7 @@ jobs:
             cd build
             zip ../build.zip -r * .[^.]*
             echo "Build successful"
-      - run:
+      - run: 
           name: Deploy to AWS S3
           command: |
             if [ "${CURRENT_BRANCH}" == "master" ]
@@ -59,22 +59,22 @@ jobs:
               aws --region ${AWS_REGION} s3 sync ~/repo/build s3://${AWS_DEV_BUCKET} --delete
             fi
   deploy-to-aws-cloudfront:
-    docker:
+    docker: 
       -image: circleci/node: 19.0.1
     working_directory: ~/repo
-    steps:
+    steps: 
       -checkout
       -run: 
         name: Show current branch
         command: echo ${CURRENT_BRANCH}
-      -run:
+      -run: 
         name: Installing AWS CLI
         working_directory: /
         command: |
           sudo apt-get -y -qq update
           sudo apt-get install -y awscli
           sudo apt-get install -y python-pip python-dev build-essential
-      -run:
+      -run: 
         name: Build Project
         command: |
           npm install
@@ -82,7 +82,7 @@ jobs:
           cd build
           zip ../build.zip -r * .[^.]*
           echo "Build successful"
-      - run:
+      - run: 
         name: Deploy to AWS Cloudfront
         command: |
           aws configure set preview.cloudfront
@@ -98,23 +98,23 @@ jobs:
 
 workflows:
   build_and_deploy:
-    jobs:
+    jobs: 
       - build
-      -develop-to-aws-s3:
-          requires:
+      -develop-to-aws-s3: 
+          requires: 
             -build
-          filters:
-            branches:
-              only:
+          filters: 
+            branches: 
+              only: 
                 -develp
                 -staging
                 - master
-      -develop-to-aws-cloudfront:
-          requires:
+      -develop-to-aws-cloudfront: 
+          requires: 
             -develop-to-aws-s3
-          filters:
-            branches:
-              only:
+          filters: 
+            branches: 
+              only: 
                 -develp
                 -staging
                 - master
