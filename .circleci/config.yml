@@ -81,39 +81,39 @@ jobs:
             cd build
             zip ../build.zip -r * .[^.]*
             echo "Build successful"
-      - run: 
-          name: Deploy to AWS Cloudfront
-          command: |
+      - run:
+        name: Deploy to AWS Cloudfront
+        command: |
           aws configure set preview.cloudfront
-          if [ "${CURRENT_BRANCH}" == "master" ]
-          then
-            aws cloudfront create-invalidation --distribution-id ${PRODUCTION_DISTRIBUTION_ID} --paths /\*
-          elif [ "${CURRENT_BRANCH}" == "staging" ]
-          then
-            aws cloudfront create-invalidation --distribution-id ${STAGING_DISTRIBUTION_ID} --paths /\*
+          if [ "${CURRENT_BRANCH}" == "master" ]; then
+            aws cloudfront create-invalidation --distribution-id ${PRODUCTION_DISTRIBUTION_ID} --paths /*
+          elif [ "${CURRENT_BRANCH}" == "staging" ]; then
+            aws cloudfront create-invalidation --distribution-id ${STAGING_DISTRIBUTION_ID} --paths /*
           else
-            aws cloudfront create-invalidation --distribution-id ${DEV_DISTRIBUTION_ID} --paths /\*
+            aws cloudfront create-invalidation --distribution-id ${DEV_DISTRIBUTION_ID} --paths /*
           fi
 
-workflows: 
-  build_and_deploy: 
-    jobs: 
-      -build: 
-      -develop-to-aws-s3: 
-          requires: 
-            -build
-          filters: 
-            branches: 
-              only: 
-                -develp
-                -staging
-                -master
-      -develop-to-aws-cloudfront: 
-          requires: 
-            -develop-to-aws-s3
-          filters: 
-            branches: 
-              only: 
-                -develp
-                -staging
-                -master
+workflows:
+  build_and_deploy:
+    jobs:
+      - build:
+      - deploy-to-aws-s3:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - develop
+                - staging
+                - master
+      - deploy-to-aws-cloudfront:
+          requires:
+            - deploy-to-aws-s3
+          filters:
+            branches:
+              only:
+                - develop
+                - staging
+                - master
+
+
