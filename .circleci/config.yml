@@ -12,7 +12,7 @@ jobs:
           command: echo ${CURRENT_BRANCH}
       - restore_cache:
           keys:
-            - app-{{checksum "package.json"}}
+            - app-{{ checksum "package.json" }}
             - app-
       - run:
           name: Install dependencies
