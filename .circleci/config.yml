@@ -5,9 +5,9 @@ jobs:
     docker:
       - image: circleci/node:19.0.1
     working_directory: ~/repo
-    steps:
+    steps: 
       - checkout
-      - run: xxx
+      - run:
         name: Show current branch
         command: echo ${CURRENT_BRANCH}
       -restore_cache: 
