@@ -17,10 +17,10 @@ resource "aws_s3_bucket_acl" "film_bucket_acl" {
 resource "aws_s3_bucket_public_access_block" "public_block" {
   bucket = aws_s3_bucket.film_s3_bucket.id
 
-  block_public_acls       = false
-  block_public_policy     = false
-  restrict_public_buckets = false
-  ignore_public_acls      = false
+  block_public_acls       = true
+  block_public_policy     = true
+  restrict_public_buckets = true
+  ignore_public_acls      = true
 }
 
 resource "aws_s3_bucket_versioning" "film_bucket_versioning" {
