@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import './Details.scss';
@@ -11,14 +11,16 @@ import Crew from './crew/Crew';
 import Media from './media/Media';
 import Reviews from './reviews/Reviews';
 import { movieDetails } from '../../../redux/actions/movies';
+import { pathURL } from '../../../redux/actions/routes';
 import { IMAGE_URL } from '../../../services/movies.service';
 import Spinner from '../../spinner/Spinner';
 
 const Details = (props) => {
-  const { movieDetails, movie } = props;
+  const { movieDetails, movie, pathURL } = props;
   const [details, setDetails] = useState();
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
+  const location = useLocation();
 
   useEffect(() => {
     setLoading(true);
@@ -28,6 +30,7 @@ const Details = (props) => {
   }, []);
 
   useEffect(() => {
+    pathURL(location.pathname, location.pathname);
     if (movie.length === 0) {
       movieDetails(id);
     }
@@ -93,11 +96,12 @@ const Details = (props) => {
 
 Details.propTypes = {
   movie: PropTypes.array,
-  movieDetails: PropTypes.func
+  movieDetails: PropTypes.func,
+  pathURL: PropTypes.func
 };
 
 const mapStateToProps = (state) => ({
   movie: state.movies.movie
 });
 
-export default connect(mapStateToProps, { movieDetails })(Details);
+export default connect(mapStateToProps, { movieDetails, pathURL })(Details);

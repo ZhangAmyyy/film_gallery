@@ -1,29 +1,49 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ErrorPage from './components/error/ErrorPage';
+import React, { useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import './App.scss';
-import store from './redux/store';
 import Header from './components/header/Header';
 import Main from './components/main/Main';
-import Details from './components/content/datails/Details';
+import Details from './components/content/details/Details';
+import ErrorBoundary from './components/error/ErrorBoundary';
+import { appRoutes } from './redux/actions/routes';
+import { AppRoutes } from './routes';
 
-function App() {
+const App = (props) => {
+  const { appRoutes } = props;
+  const routesArray = [
+    {
+      id: 1,
+      path: '/',
+      component: Main
+    },
+    {
+      id: 2,
+      path: '/:id/:name/details',
+      component: Details
+    }
+  ];
+
+  useEffect(() => {
+    appRoutes(routesArray);
+  }, [routesArray, appRoutes]);
+
   return (
-    <Provider store={store}>
-      <Router>
-        <Header />
-        <div className="app">
-          <Routes>
-            <Route path="/" element={<Main />} />
-            <Route path="/:id/:name/details" element={<Details />} />
-            <Route path="*" element={<ErrorPage />} />
-          </Routes>
-        </div>
-      </Router>
-    </Provider>
+    <div className="app">
+      <BrowserRouter>
+        <ErrorBoundary>
+          <Header />
+        </ErrorBoundary>
+        <AppRoutes />
+      </BrowserRouter>
+    </div>
   );
-}
+};
 
-export default App;
+App.propTypes = {
+  appRoutes: PropTypes.func
+};
+
+export default connect(null, { appRoutes })(App);
