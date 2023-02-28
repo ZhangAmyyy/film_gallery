@@ -27,7 +27,11 @@ export const getMovies = (type, pageNumber) => async (dispatch) => {
     dispatchMethod(RESPONSE_PAGE, payload, dispatch);
   } catch (error) {
     if (error.response) {
-      dispatchMethod(SET_ERROR, error.response.data.message, dispatch);
+      const payload = {
+        message: error.response.data.message || error.response.data.status_message,
+        statusCode: error.response.status
+      };
+      dispatchMethod(SET_ERROR, payload, dispatch);
     }
   }
 };
@@ -39,22 +43,15 @@ export const loadMoreMovies = (type, pageNumber) => async (dispatch) => {
     dispatchMethod(LOAD_MORE_RESULTS, { list: results, page: payload.page, totalPages: payload.totalPages }, dispatch);
   } catch (error) {
     if (error.response) {
-      dispatchMethod(SET_ERROR, error.response.data.message, dispatch);
+      const payload = {
+        message: error.response.data.message || error.response.data.status_message,
+        statusCode: error.response.status
+      };
+      dispatchMethod(SET_ERROR, payload, dispatch);
     }
   }
 };
 
-export const setResponsePageNumber = (page, totalPages) => async (dispatch) => {
-  const payload = { page, totalPages };
-  dispatchMethod(RESPONSE_PAGE, payload, dispatch);
-};
-
-export const setMovieType = (type) => async (dispatch) => {
-  dispatchMethod(MOVIE_TYPE, type, dispatch);
-};
-export const searchQuery = (query) => async (dispatch) => {
-  dispatchMethod(SEARCH_QUERY, query, dispatch);
-};
 export const searchResult = (query) => async (dispatch) => {
   try {
     if (query) {
@@ -66,10 +63,15 @@ export const searchResult = (query) => async (dispatch) => {
     }
   } catch (error) {
     if (error.response) {
-      dispatchMethod(SET_ERROR, error.response.data.message, dispatch);
+      const payload = {
+        message: error.response.data.message || error.response.data.status_message,
+        statusCode: error.response.status
+      };
+      dispatchMethod(SET_ERROR, payload, dispatch);
     }
   }
 };
+
 export const movieDetails = (id) => async (dispatch) => {
   try {
     const details = await MOVIE_DETAILS_URL(id);
@@ -88,8 +90,22 @@ export const movieDetails = (id) => async (dispatch) => {
     }
   }
 };
+
 export const clearMovieDetails = () => async (dispatch) => {
   dispatchMethod(CLEAR_MOVIE_DETAILS, [], dispatch);
+};
+
+export const setResponsePageNumber = (page, totalPages) => async (dispatch) => {
+  const payload = { page, totalPages };
+  dispatchMethod(RESPONSE_PAGE, payload, dispatch);
+};
+
+export const setMovieType = (type) => async (dispatch) => {
+  dispatchMethod(MOVIE_TYPE, type, dispatch);
+};
+
+export const searchQuery = (query) => async (dispatch) => {
+  dispatchMethod(SEARCH_QUERY, query, dispatch);
 };
 
 const dispatchMethod = (type, payload, dispatch) => {
