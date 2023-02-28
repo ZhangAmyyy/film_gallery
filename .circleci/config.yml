@@ -15,7 +15,7 @@ executors:
       - image: hashicorp/terraform:0.14.3
   docker-publisher:
     environment:
-      IMAGE_NAME: amy/filmdb
+      IMAGE_NAME: zhangyyamy/filmdb
     docker:
       - image: circleci/buildpack-deps:stretch
 
