@@ -37,10 +37,12 @@ const Details = (props) => {
 
   return (
     <>
-      {loading ? (
+      {loading
+        ? (
         <Spinner />
-      ) : (
-        details && (
+          )
+        : (
+            details && (
           <div className="movie-container">
             <div className="movie-bg" style={{ backgroundImage: `url(${IMAGE_URL}${details.backdrop_path})` }}></div>
             <div className="movie-overlay"></div>
@@ -83,8 +85,8 @@ const Details = (props) => {
               </div>
             </div>
           </div>
-        )
-      )}
+            )
+          )}
     </>
   );
 };
