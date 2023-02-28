@@ -143,6 +143,7 @@ jobs:
               docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:dev-${CIRCLE_BUILD_NUM} && docker push ${IMAGE_NAME}:dev-${CIRCLE_BUILD_NUM}
             fi
 
+
   deploy-to-aws-s3:
     executor: app-executor
     steps:
