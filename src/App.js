@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ErrorPage from './components/error/ErrorPage';
 
 import './App.scss';
 import store from './redux/store';
@@ -17,6 +18,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Main />} />
             <Route path="/:id/:name/details" element={<Details />} />
+            <Route path="*" element={<ErrorPage />} />
           </Routes>
         </div>
       </Router>
