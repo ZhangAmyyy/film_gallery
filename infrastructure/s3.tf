@@ -14,6 +14,13 @@ resource "aws_s3_bucket_acl" "film_bucket_acl" {
   acl    = "private"
 }
 
+resource "aws_s3_bucket_ownership_controls" "s3_bucket_acl_ownership" {
+  bucket = aws_s3_bucket.film_s3_bucket.id
+  rule {
+    object_ownership = "ObjectWriter"
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "public_block" {
   bucket = aws_s3_bucket.film_s3_bucket.id
 
