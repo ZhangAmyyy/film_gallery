@@ -17,7 +17,7 @@ resource "aws_s3_bucket_acl" "film_bucket_acl" {
 resource "aws_s3_bucket_ownership_controls" "s3_bucket_acl_ownership" {
   bucket = aws_s3_bucket.film_s3_bucket.id
   rule {
-    object_ownership = "ObjectWriter"
+    object_ownership = "BucketOwnerEnforced"
   }
 }
 
