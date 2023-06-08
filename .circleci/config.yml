@@ -269,12 +269,12 @@ workflows:
       - linting:
           requires:
             - build
-          filters:
-            branches:
-              only:
-                - develop
-                - staging
-                - master
+          # filters:
+          #   branches:
+          #     only:
+          #       - develop
+          #       - staging
+          #       - master
       - terraform-validate:
           requires:
             - linting
@@ -284,6 +284,7 @@ workflows:
                 - develop
                 - staging
                 - master
+                - rebuild-ci-pipeline
       - terraform-plan-and-apply:
           requires:
             - terraform-validate
@@ -293,6 +294,7 @@ workflows:
                 - develop
                 - staging
                 - master
+                - rebuild-ci-pipeline
       - publish-to-docker-hub:
           requires:
             - terraform-plan-and-apply
@@ -301,7 +303,8 @@ workflows:
               only:
                 - develop
                 - staging
-                - master          
+                - master 
+                - rebuild-ci-pipeline         
       - deploy-to-aws-s3:
           requires:
             - publish-to-docker-hub
@@ -311,6 +314,7 @@ workflows:
                 - develop
                 - staging
                 - master
+                - rebuild-ci-pipeline
       - deploy-to-aws-cloudfront:
           requires:
             - deploy-to-aws-s3
@@ -320,6 +324,7 @@ workflows:
                 - develop
                 - staging
                 - master
+                - rebuild-ci-pipeline
       - notify-via-slack: 
           requires: 
             - deploy-to-aws-cloudfront
@@ -329,6 +334,7 @@ workflows:
                 - develop
                 - staging
                 - master
+                - rebuild-ci-pipeline
       - hold:
           type: approval
           requires:
@@ -342,6 +348,7 @@ workflows:
                 - develop
                 - staging
                 - master
+                - rebuild-ci-pipeline
 
 
 
