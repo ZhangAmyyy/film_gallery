@@ -22,8 +22,7 @@ jobs:
             tar xf google-cloud-sdk-365.0.0-linux-x86_64.tar.gz
             export CLOUDSDK_CORE_DISABLE_PROMPTS=1
             ./google-cloud-sdk/install.sh --quiet
-            echo 'source /home/circleci/google-cloud-sdk/path.bash.inc' >> $BASH_ENV
-            source $BASH_ENV
+            source /home/circleci/google-cloud-sdk/path.bash.inc
 
       # 配置 gcloud SDK
       - run:
