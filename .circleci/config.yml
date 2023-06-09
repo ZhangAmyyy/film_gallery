@@ -10,8 +10,6 @@ jobs:
     environment:
       GCLOUD_PROJECT_ID: cinema-389321  
       GCLOUD_SERVICE_KEY: $GCLOUD_SERVICE_KEY
-      CLUSTER_NAME: cin
-      CLUSTER_ZONE: YOUR_CLUSTER_ZONE
 
     steps:
       - checkout
@@ -26,8 +24,7 @@ jobs:
 
       - run:
           name: Export gcloud SDK path
-          command: echo 'export PATH="$PATH:/usr/lib/google-cloud-sdk/bin"' >> $BASH_ENV
-            && source $BASH_ENV
+          command: echo 'export PATH="$PATH:/usr/lib/google-cloud-sdk/bin"' >> $BASH_ENV && source $BASH_ENV
 
       # 配置 gcloud SDK
       - run:
@@ -36,7 +33,7 @@ jobs:
             echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
             gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
             gcloud config set project $GCLOUD_PROJECT_ID
-            gcloud container clusters create $CLUSTER_NAME --zone $CLUSTER_ZONE
+            
 
 workflows:
   build_and_deploy:
