@@ -18,11 +18,7 @@ jobs:
       - run:
           name: Install gcloud SDK
           command: |
-            wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-365.0.0-linux-x86_64.tar.gz
-            tar xf google-cloud-sdk-365.0.0-linux-x86_64.tar.gz
-            export CLOUDSDK_CORE_DISABLE_PROMPTS=1
-            ./google-cloud-sdk/install.sh --quiet
-            source /home/circleci/google-cloud-sdk/path.bash.inc
+            sudo apt-get install -y google-cloud-sdk
 
       # 配置 gcloud SDK
       - run:
