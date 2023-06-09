@@ -24,12 +24,13 @@ jobs:
 
       - run:
           name: Export gcloud SDK path
-          command: echo 'export PATH="$PATH:/usr/lib/google-cloud-sdk/bin"' >> $BASH_ENV && source $BASH_ENV
+          command: echo 'export PATH="$PATH:/usr/lib/google-cloud-sdk/bin"' >> $BASH_ENV 
 
       # 配置 gcloud SDK
       - run:
           name: Configure gcloud SDK
           command: |
+            source $BASH_ENV
             echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
             gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
             gcloud config set project $GCLOUD_PROJECT_ID
