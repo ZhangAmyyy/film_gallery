@@ -13,8 +13,8 @@ jobs:
 
     steps:
       - checkout
-      
-        - run:
+
+      - run:
           name: Install gcloud SDK
           command: |
             wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-365.0.0-linux-x86_64.tar.gz
