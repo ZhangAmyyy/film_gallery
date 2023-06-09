@@ -31,7 +31,7 @@ jobs:
             gcloud container clusters create $CLUSTER_NAME --zone $CLUSTER_ZONE
 
 workflows:
-  build_update_deploy:
+  build_and_deploy:
     jobs:
-      - build
+      - build_and_deploy
       
