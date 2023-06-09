@@ -1,7 +1,6 @@
 version: 2.1
 
 jobs:
-  build
   build:
     description: Install npm
     # machine option runs your jobs in a dedicated, ephemeral VM that has the following specifications:
