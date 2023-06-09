@@ -20,10 +20,9 @@ jobs:
       - run:
           name: Install gcloud SDK
           command: |
-            export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-            echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-            sudo apt-get update && sudo apt-get install -y google-cloud-sdk --quiet
+            curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz --output google-cloud-sdk.tar.gz
+            tar xf google-cloud-sdk.tar.gz
+            ./google-cloud-sdk/install.sh --quiet
 
       - run:
           name: Export gcloud SDK path
