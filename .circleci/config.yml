@@ -20,7 +20,8 @@ jobs:
           command: |
             sudo apt-get update && sudo apt-get install -y curl
             export CLOUDSDK_CORE_DISABLE_PROMPTS=1
-            curl https://sdk.cloud.google.com | bash
+            curl https://sdk.cloud.google.com | bash -s -- --disable-prompts --quiet
+            source $HOME/google-cloud-sdk/path.bash.inc
             exec -l $SHELL
 
       # 配置 gcloud SDK
