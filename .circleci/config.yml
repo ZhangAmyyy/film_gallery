@@ -21,7 +21,7 @@ jobs:
             wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-365.0.0-linux-x86_64.tar.gz
             tar xf google-cloud-sdk-365.0.0-linux-x86_64.tar.gz
             ./google-cloud-sdk/install.sh --quiet
-            echo 'export PATH=$PATH:/root/google-cloud-sdk/bin' >> $BASH_ENV
+            echo 'export PATH=$PATH:/home/google-cloud-sdk/bin' >> $BASH_ENV
             source $BASH_ENV
 
             # 添加 gcloud SDK 的路径到 PATH 环境变量
