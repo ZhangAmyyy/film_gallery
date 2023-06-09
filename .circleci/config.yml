@@ -1,13 +1,33 @@
 version: 2.1
-orbs:
-  node: circleci/node@1.0.1
-  gcp-gke: circleci/gcp-gke@0.1.0
-  gcr: circleci/gcp-gcr@0.0.2
+
 jobs:
+  build
   build:
     description: Install npm
     # machine option runs your jobs in a dedicated, ephemeral VM that has the following specifications:
-    machine: true
+    machine: truversion: 2.1
+
+jobs:
+  build_and_deploy:
+    docker:
+      - image: circleci/python:3.8
+
+    environment:
+      GCLOUD_PROJECT_ID:  cinima-389321 
+      GCLOUD_SERVICE_KEY: $GCLOUD_SERVICE_KEY
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install gcloud SDK
+          command: |
+            wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-365.0.0-linux-x86_64.tar.gz
+            tar xf google-cloud-sdk-365.0.0-linux-x86_64.tar.gz
+            ./google-cloud-sdk/install.sh
+            source $HOME/google-cloud-sdk/path.bash.inc
+
+     
     steps:
       - checkout
       # Install node
