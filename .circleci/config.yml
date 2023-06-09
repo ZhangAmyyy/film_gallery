@@ -18,7 +18,10 @@ jobs:
       - run:
           name: Install gcloud SDK
           command: |
-            sudo apt-get install -y google-cloud-sdk
+            sudo apt-get update && sudo apt-get install -y curl
+            export CLOUDSDK_CORE_DISABLE_PROMPTS=1
+            curl https://sdk.cloud.google.com | bash
+            exec -l $SHELL
 
       # 配置 gcloud SDK
       - run:
