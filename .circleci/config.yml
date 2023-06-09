@@ -3,8 +3,8 @@ version: 2.1
 jobs:
   build:
     description: Install npm
-    # machine option runs your jobs in a dedicated, ephemeral VM that has the following specifications:
-    machine: truversion: 2.1
+    machine: 
+      truversion: 2.1
 
 jobs:
   build_and_deploy:
