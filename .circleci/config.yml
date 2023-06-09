@@ -1,40 +1,15 @@
 version: 2.1
+orbs:
+  gcp-cli: circleci/gcp-cli@2.4.1
 
 jobs:
-  build_and_deploy:
-    docker:
-      - image: circleci/python:3.8
-
-    environment:
-      GCLOUD_PROJECT_ID: cinema-389321  
-      GCLOUD_SERVICE_KEY: $GCLOUD_SERVICE_KEY
-      CLUSTER_NAME: cin
-      CLUSTER_ZONE: YOUR_CLUSTER_ZONE
-
+  use-gcp:
+    executor: gcp-cli/default
     steps:
-      - checkout
-
-      # 安装 gcloud SDK
-      - run:
-          name: Install gcloud SDK
-          command: |
-            sudo apt-get update && sudo apt-get install -y curl
-            export CLOUDSDK_CORE_DISABLE_PROMPTS=1
-            curl https://sdk.cloud.google.com | bash -s -- --disable-prompts --quiet
-            source $HOME/google-cloud-sdk/path.bash.inc
-            exec -l $SHELL
-
-      # 配置 gcloud SDK
-      - run:
-          name: Configure gcloud SDK
-          command: |
-            echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
-            gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
-            gcloud config set project $GCLOUD_PROJECT_ID
-            gcloud container clusters create $CLUSTER_NAME --zone $CLUSTER_ZONE
-
+      - gcp-cli/setup:
+          version: 404.0.0
 workflows:
-  build_and_deploy:
+  install_and_configure_cli:
     jobs:
-      - build_and_deploy
-      
+      - use-gcp:
+          context: install-gcp-cli
