@@ -68,8 +68,19 @@ jobs:
             docker pull zhangyyamy/filmdb:dev-384
             docker tag zhangyyamy/filmdb:dev-384 gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
             docker push gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
-            kubectl create deployment cinema-deploy --image=gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
-            kubectl rollout status deployment/cinema-deploy
+      - run:
+          name: Check if deployment exists
+          command: |
+            source '/home/circleci/google-cloud-sdk/completion.bash.inc'
+            source '/home/circleci/google-cloud-sdk/path.bash.inc'
+            if kubectl get deployment cinema-deploy; then
+              echo "Deployment already exists, skipping deployment creation"
+              exit 0
+            else
+              echo "Deployment does not exist, creating new deployment"
+              kubectl create deployment cinema-deploy --image=gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
+              kubectl rollout status deployment/cinema-deploy
+            fi
             kubectl get services
 
             
