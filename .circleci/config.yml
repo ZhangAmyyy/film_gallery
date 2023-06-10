@@ -33,7 +33,7 @@ jobs:
             source '/home/circleci/google-cloud-sdk/completion.bash.inc'
             source '/home/circleci/google-cloud-sdk/path.bash.inc'
             gcloud auth activate-service-account --key-file=.circleci/service-account-key.json
-            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set project ${GCLOUD_PROJECT_ID}
             gcloud container clusters create cinema_cluster --zone us-central1-a
             
 
