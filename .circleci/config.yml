@@ -35,7 +35,7 @@ jobs:
             echo $GCLOUD_SERVICE_KEY
             echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcloud-service-key.json
             tail ${HOME}/gcloud-service-key.json
-            gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+            gcloud auth activate-service-account --key-file=$GCLOUD_SERVICE_KEY
             gcloud config set project $GCLOUD_PROJECT_ID
             
 
