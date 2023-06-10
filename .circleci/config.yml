@@ -7,7 +7,7 @@ jobs:
     
     environment:
       GCLOUD_PROJECT_ID: cinema-389321  
-      GCLOUD_SERVICE_KEY: "aa0f40b698197db50b5e02bc714471a2994a9efa"
+      GCLOUD_SERVICE_ACCOUT: cinema-gke-deploy@cinema-389321.iam.gserviceaccount.com
 
     steps:
       - checkout
@@ -32,8 +32,8 @@ jobs:
           command: |
             source '/home/circleci/google-cloud-sdk/completion.bash.inc'
             source '/home/circleci/google-cloud-sdk/path.bash.inc'
-            gcloud auth activate-service-account --key-file=.circleci/service-account-key.json
-            gcloud config set project $GCLOUD_PROJECT_ID
+            gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUT --key-file=.circleci/service-account-key.json
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
             
 
 workflows:
