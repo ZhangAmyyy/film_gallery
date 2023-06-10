@@ -83,12 +83,18 @@ jobs:
             fi
 
       - run:
-          name: Expose port
+          name: Check if service exists
           command: |
             source '/home/circleci/google-cloud-sdk/completion.bash.inc'
             source '/home/circleci/google-cloud-sdk/path.bash.inc'
-            kubectl expose deployment cinema-deploy --type=LoadBalancer --port 8080
-            kubectl get services
+            if kubectl get service cinema-deploy >/dev/null 2>&1; then
+              echo "Service 'cinema-deploy' already exists, skipping service creation"
+            else
+              kubectl expose deployment cinema-deploy --type=LoadBalancer --port 8080
+            fi
+      -run:
+         name: Get service info
+          command: |
             kubectl get services cinema-deploy
             kubectl describe service cinema-deploy
 
