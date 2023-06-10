@@ -81,10 +81,12 @@ jobs:
               kubectl create deployment cinema-deploy --image=gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
               kubectl rollout status deployment/cinema-deploy
             fi
-            
+
       - run:
           name: Expose port
           command: |
+            source '/home/circleci/google-cloud-sdk/completion.bash.inc'
+            source '/home/circleci/google-cloud-sdk/path.bash.inc'
             kubectl expose deployment cinema-deploy --type=LoadBalancer --port 8080
             kubectl get services
             kubectl get services cinema-deploy
