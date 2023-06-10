@@ -34,7 +34,7 @@ jobs:
             source '/home/circleci/google-cloud-sdk/path.bash.inc'
             gcloud auth activate-service-account --key-file=.circleci/service-account-key.json
             gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
-            gcloud container clusters create cinema-cluster --zone us-central1-a --location-policy=BALANCED
+            gcloud container clusters create cinema-cluster --zone us-central1-a --location-policy=BALANCED --no-enable-ip-alias --cluster-ipv4-cidr=10.0.0.0/16
             
 
 workflows:
