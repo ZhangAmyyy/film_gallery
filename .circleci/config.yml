@@ -34,7 +34,7 @@ jobs:
             source '/home/circleci/google-cloud-sdk/path.bash.inc'
             echo $GCLOUD_SERVICE_KEY
             echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcloud-service-key.json
-            ls ${HOME}/gcloud-service-key.json
+            tail ${HOME}/gcloud-service-key.json
             gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
             gcloud config set project $GCLOUD_PROJECT_ID
             
