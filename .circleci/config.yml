@@ -21,6 +21,11 @@ jobs:
             curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz --output google-cloud-sdk.tar.gz
             tar xf google-cloud-sdk.tar.gz
             ./google-cloud-sdk/install.sh --quiet
+      
+      - run:
+          name: Export gcloud SDK path
+          command: echo 'export PATH=$PATH:/home/circleci/project/google-cloud-sdk/bin' >> $BASH_ENV
+
 
 workflows:
   build_and_deploy:
