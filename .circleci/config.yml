@@ -83,6 +83,7 @@ jobs:
             fi
             kubectl get services
             kubectl get services cinema-deploy
+            kubectl describe service cinema-deploy
 
             
 
