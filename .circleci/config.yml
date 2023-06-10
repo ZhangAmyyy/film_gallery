@@ -56,7 +56,15 @@ jobs:
             gcloud components install gke-gcloud-auth-plugin
             gcloud components install kubectl
             gcloud container clusters get-credentials cinema-cluster --zone us-central1-a
-            
+      
+      - run:
+          name: Deploy Docker image
+          command: |
+            docker pull zhangyyamy/filmdb:dev-384
+            docker tag zhangyyamy/filmdb:dev-384 gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
+            docker push gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
+            kubectl create deployment cinema-deploy --image=gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
+            kubectl rollout status deployment/cinema-deploy
             
 
 workflows:
