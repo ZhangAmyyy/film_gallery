@@ -1,6 +1,4 @@
 version: 2.1
-orbs:
-  gcp-cli: circleci/gcp-cli@2.4.1
 
 jobs:
   build_and_deploy:
@@ -35,6 +33,7 @@ jobs:
             source '/home/circleci/google-cloud-sdk/completion.bash.inc'
             source '/home/circleci/google-cloud-sdk/path.bash.inc'
             echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
+            ls ${HOME}/gcloud-service-key.json
             gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
             gcloud config set project $GCLOUD_PROJECT_ID
             
