@@ -21,3 +21,8 @@ jobs:
             curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz --output google-cloud-sdk.tar.gz
             tar xf google-cloud-sdk.tar.gz
             ./google-cloud-sdk/install.sh --quiet
+
+workflows:
+  build_and_deploy:
+    jobs:
+      - build_and_deploy
