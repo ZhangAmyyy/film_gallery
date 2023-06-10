@@ -6,7 +6,7 @@ jobs:
       - image: circleci/python:3.8
     
     environment:
-      GCLOUD_PROJECT_ID: 'cinema'  
+      GCLOUD_PROJECT_ID: 'cinema-389321'  
       GCLOUD_SERVICE_ACCOUT: cinema-gke-deploy@cinema-389321.iam.gserviceaccount.com
 
     steps:
@@ -33,7 +33,7 @@ jobs:
             source '/home/circleci/google-cloud-sdk/completion.bash.inc'
             source '/home/circleci/google-cloud-sdk/path.bash.inc'
             gcloud auth activate-service-account --key-file=.circleci/service-account-key.json
-            gcloud --quiet config set project ${GCLOUD_PROJECT_ID}
+            gcloud config set project [PROJECT_ID]
             gcloud container clusters create cinema_cluster --zone us-central1-a
             
 
