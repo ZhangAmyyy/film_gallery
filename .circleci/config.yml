@@ -4,6 +4,10 @@ jobs:
   build_and_deploy:
     docker:
       - image: circleci/python:3.8
+    
+    environment:
+      GCLOUD_PROJECT_ID: cinema-389321  
+      GCLOUD_SERVICE_KEY: "aa0f40b698197db50b5e02bc714471a2994a9efa"
 
     steps:
       - checkout
