@@ -81,12 +81,6 @@ jobs:
               kubectl create deployment cinema-deploy --image=gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
               kubectl rollout status deployment/cinema-deploy
             fi
-      - run:
-          name: Delete existing service
-          command: |
-            source '/home/circleci/google-cloud-sdk/completion.bash.inc'
-            source '/home/circleci/google-cloud-sdk/path.bash.inc'
-            kubectl delete service cinema-deploy
 
       - run:
           name: Check if service exists
