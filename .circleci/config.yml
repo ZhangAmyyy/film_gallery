@@ -81,6 +81,10 @@ jobs:
               kubectl create deployment cinema-deploy --image=gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
               kubectl rollout status deployment/cinema-deploy
             fi
+            
+      - run:
+          name: Expose port
+          command: |
             kubectl expose deployment cinema-deploy --type=LoadBalancer --port 8080
             kubectl get services
             kubectl get services cinema-deploy
