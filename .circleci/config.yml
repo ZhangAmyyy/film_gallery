@@ -92,6 +92,7 @@ jobs:
             else
               kubectl expose deployment cinema-deploy --type=LoadBalancer --port 8080
             fi
+            
       -run:
           name: Get service info
           command: |
