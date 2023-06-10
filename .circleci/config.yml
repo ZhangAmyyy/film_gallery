@@ -18,17 +18,13 @@ jobs:
       - run:
           name: Install gcloud SDK
           command: |
-             curl https://sdk.cloud.google.com > install.sh
-             bash install.sh --disable-prompts
-            #  echo 'export PATH="/home/circleci/project/google-cloud-sdk/path.bash.inc"' >> $BASH_ENV
-            #  echo 'export PATH="/home/circleci/project/google-cloud-sdk/bin"' >> $BASH_ENV
-            #  echo 'export PATH="/home/circleci/project/google-cloud-sdk/completion.bash.inc"' >> $BASH_ENV
-            #  source $BASH_ENV
-             source '~/circleci/google-cloud-sdk/completion.bash.inc'
-             source '~/circleci/google-cloud-sdk/path.bash.inc'
-             source '~/circleci/google-cloud-sdk/bin'
-             source '~/.bashrc'
-             gcloud version
+            curl https://sdk.cloud.google.com > install.sh
+            bash install.sh --disable-prompts
+            source '~/circleci/google-cloud-sdk/completion.bash.inc'
+            source '~/circleci/google-cloud-sdk/path.bash.inc'
+            source '~/circleci/google-cloud-sdk/bin'
+            source '~/.bashrc'
+            gcloud version
           # persist_to_workspace:
           #   root: .
           #   paths:
