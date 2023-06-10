@@ -61,6 +61,8 @@ jobs:
       - run:
           name: Deploy Docker image
           command: |
+            source '/home/circleci/google-cloud-sdk/completion.bash.inc'
+            source '/home/circleci/google-cloud-sdk/path.bash.inc'
             docker login -u "${DOCKER_HUB_USER}" -p "${DOCKER_HUB_PASSWORD}"
             gcloud auth configure-docker
             docker pull zhangyyamy/filmdb:dev-384
