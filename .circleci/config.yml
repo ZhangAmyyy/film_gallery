@@ -62,6 +62,7 @@ jobs:
           name: Deploy Docker image
           command: |
             docker login -u "${DOCKER_HUB_USER}" -p "${DOCKER_HUB_PASSWORD}"
+            gcloud auth configure-docker
             docker pull zhangyyamy/filmdb:dev-384
             docker tag zhangyyamy/filmdb:dev-384 gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
             docker push gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
