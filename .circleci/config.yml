@@ -22,12 +22,17 @@ jobs:
             tar xf google-cloud-sdk.tar.gz
             ./google-cloud-sdk/install.sh --quiet
             echo 'export PATH="/home/circleci/project/google-cloud-sdk/path.bash.inc"' >> $BASH_ENV
-            gcloud version
+          persist_to_workspace:
+            root: .
+            paths:
+              - $BASH_ENV
       
-      - persist_to_workspace:
-          root: .
-          paths:
-            - $BASH_ENV
+      # 验证 gcloud 安装
+      - run:
+          name: Verify gcloud installation
+          command: |
+            echo $PATH
+            gcloud version
             
 
       # # 配置 gcloud SDK
