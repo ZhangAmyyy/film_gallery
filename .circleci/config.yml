@@ -57,9 +57,11 @@ jobs:
             gcloud components install kubectl
             gcloud container clusters get-credentials cinema-cluster --zone us-central1-a
       
+      - setup_remote_docker
       - run:
           name: Deploy Docker image
           command: |
+            docker login -u "${DOCKER_HUB_USER}" -p "${DOCKER_HUB_PASSWORD}"
             docker pull zhangyyamy/filmdb:dev-384
             docker tag zhangyyamy/filmdb:dev-384 gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
             docker push gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
