@@ -81,6 +81,12 @@ jobs:
               kubectl create deployment cinema-deploy --image=gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
               kubectl rollout status deployment/cinema-deploy
             fi
+      - run:
+          name: Delete existing service
+          command: |
+            source '/home/circleci/google-cloud-sdk/completion.bash.inc'
+            source '/home/circleci/google-cloud-sdk/path.bash.inc'
+            kubectl delete service cinema-deploy
 
       - run:
           name: Check if service exists
@@ -90,7 +96,7 @@ jobs:
             if kubectl get service cinema-deploy >/dev/null 2>&1; then
               echo "Service 'cinema-deploy' already exists, skipping service creation"
             else
-              kubectl expose deployment cinema-deploy --type=LoadBalancer --port 8080
+              kubectl expose deployment cinema-deploy --type=LoadBalancer --port 8080 --target-port 3000
             fi
 
             kubectl get services cinema-deploy
