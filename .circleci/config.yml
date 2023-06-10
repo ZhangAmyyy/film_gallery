@@ -38,7 +38,10 @@ jobs:
       - run:
           name: Check if cluster exists
           command: |
-            if gcloud container clusters describe cinema-cluster --zone us-central1-a >/dev/null 2>&1; then
+            source '/home/circleci/google-cloud-sdk/completion.bash.inc'
+            source '/home/circleci/google-cloud-sdk/path.bash.inc'
+            gcloud container clusters describe cinema-cluster --zone us-central1-a
+            if [ $? -eq 0 ]; then
               echo "Cluster already exists, skipping cluster creation"
             else
               echo "Cluster does not exist, creating new cluster"
