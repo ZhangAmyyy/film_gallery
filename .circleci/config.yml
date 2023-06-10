@@ -20,7 +20,7 @@ jobs:
           command: |
             curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-434.0.0-linux-x86_64.tar.gz
             tar -xf google-cloud-cli-434.0.0-linux-x86_64.tar.gz
-            ./google-cloud-sdk/install.sh --quiet
+            ./google-cloud-sdk/install.sh
             echo 'export PATH="/home/circleci/project/google-cloud-sdk/bin"' >> $BASH_ENV
             gcloud version
           # persist_to_workspace:
