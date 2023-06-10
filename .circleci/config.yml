@@ -47,6 +47,16 @@ jobs:
               echo "Cluster does not exist, creating new cluster"
               gcloud container clusters create cinema-cluster --zone us-central1-a --location-policy=BALANCED --no-enable-ip-alias --cluster-ipv4-cidr=10.0.0.0/16 --num-nodes=3 --disk-size=50GB
             fi
+      
+      - run:
+          name: Connet to cluster
+          command: |
+            source '/home/circleci/google-cloud-sdk/completion.bash.inc'
+            source '/home/circleci/google-cloud-sdk/path.bash.inc'
+            gcloud components install gke-gcloud-auth-plugin
+            gcloud components install kubectl
+            gcloud container clusters get-credentials cinema-cluster --zone us-central1-a
+            
             
 
 workflows:
