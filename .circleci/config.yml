@@ -22,8 +22,6 @@ jobs:
             bash install.sh --disable-prompts
             source '/home/circleci/google-cloud-sdk/completion.bash.inc'
             source '/home/circleci/google-cloud-sdk/path.bash.inc'
-            source '/home/circleci/google-cloud-sdk/bin'
-            source '/home/.bashrc'
             gcloud version
           # persist_to_workspace:
           #   root: .
