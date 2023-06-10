@@ -14,6 +14,12 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          name: Install required dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y coreutils python
+
       # 安装 gcloud SDK
       - run:
           name: Install gcloud SDK
