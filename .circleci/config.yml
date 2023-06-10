@@ -21,22 +21,25 @@ jobs:
             source '/home/circleci/google-cloud-sdk/completion.bash.inc'
             source '/home/circleci/google-cloud-sdk/path.bash.inc'
             gcloud version
+            auth:
+              username: 'cinema-gke-deploy@cinema-389321.iam.gserviceaccount.com'
+              password: 'aa0f40b698197db50b5e02bc714471a2994a9efa'
           # persist_to_workspace:
           #   root: .
           #   paths:
           #     - $BASH_ENV
             
       # 配置 gcloud SDK
-      - run:
-          name: Configure gcloud SDK
-          command: |
-            source '/home/circleci/google-cloud-sdk/completion.bash.inc'
-            source '/home/circleci/google-cloud-sdk/path.bash.inc'
-            echo $GCLOUD_SERVICE_KEY
-            echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcloud-service-key.json
-            tail ${HOME}/gcloud-service-key.json
-            gcloud auth activate-service-account --key-file=$GCLOUD_SERVICE_KEY
-            gcloud config set project $GCLOUD_PROJECT_ID
+      # - run:
+      #     name: Configure gcloud SDK
+      #     command: |
+      #       source '/home/circleci/google-cloud-sdk/completion.bash.inc'
+      #       source '/home/circleci/google-cloud-sdk/path.bash.inc'
+      #       echo $GCLOUD_SERVICE_KEY
+      #       echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcloud-service-key.json
+      #       tail ${HOME}/gcloud-service-key.json
+      #       gcloud auth activate-service-account --key-file=$GCLOUD_SERVICE_KEY
+      #       gcloud config set project $GCLOUD_PROJECT_ID
             
 
 workflows:
