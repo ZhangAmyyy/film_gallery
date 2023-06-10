@@ -5,10 +5,6 @@ jobs:
     docker:
       - image: circleci/python:3.8
 
-    environment:
-      GCLOUD_PROJECT_ID: cinema-389321  
-      GCLOUD_SERVICE_KEY: $GCLOUD_SERVICE_KEY
-
     steps:
       - checkout
 
@@ -32,7 +28,7 @@ jobs:
           command: |
             source '/home/circleci/google-cloud-sdk/completion.bash.inc'
             source '/home/circleci/google-cloud-sdk/path.bash.inc'
-            echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
+            echo ${GCLOUD_SERVICE_KEY} | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
             ls ${HOME}/gcloud-service-key.json
             gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
             gcloud config set project $GCLOUD_PROJECT_ID
