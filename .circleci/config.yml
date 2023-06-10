@@ -34,7 +34,16 @@ jobs:
             source '/home/circleci/google-cloud-sdk/path.bash.inc'
             gcloud auth activate-service-account --key-file=.circleci/service-account-key.json
             gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
-            gcloud container clusters create cinema-cluster --zone us-central1-a --location-policy=BALANCED --no-enable-ip-alias --cluster-ipv4-cidr=10.0.0.0/16 --num-nodes=3 --disk-size=50GB
+            
+      - run:
+          name: Check if cluster exists
+          command: |
+            if gcloud container clusters describe cinema-cluster --zone us-central1-a >/dev/null 2>&1; then
+              echo "Cluster already exists, skipping cluster creation"
+            else
+              echo "Cluster does not exist, creating new cluster"
+              gcloud container clusters create cinema-cluster --zone us-central1-a --location-policy=BALANCED --no-enable-ip-alias --cluster-ipv4-cidr=10.0.0.0/16 --num-nodes=3 --disk-size=50GB
+            fi
             
 
 workflows:
