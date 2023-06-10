@@ -24,7 +24,7 @@ jobs:
 
       - run:
           name: Export gcloud SDK path
-          command: echo 'export PATH="/home/circleci/project/google-cloud-sdk/path.bash.inc"' >> $BASH_ENV
+          command: echo 'export PATH="/home/circleci/project/google-cloud-sdk/bin"' >> $BASH_ENV
 
       - run:
           name: Verify gcloud installation
