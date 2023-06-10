@@ -6,7 +6,7 @@ jobs:
       - image: circleci/python:3.8
     
     environment:
-      GCLOUD_PROJECT_ID: 'cinema-389321'  
+      GCLOUD_PROJECT_ID: 'cinema'  
       GCLOUD_SERVICE_ACCOUT: cinema-gke-deploy@cinema-389321.iam.gserviceaccount.com
 
     steps:
