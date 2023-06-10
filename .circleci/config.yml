@@ -14,12 +14,6 @@ jobs:
     steps:
       - checkout
 
-      - run:
-          name: Install required dependencies
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y coreutils python
-
       # 安装 gcloud SDK
       - run:
           name: Install gcloud SDK
@@ -31,6 +25,10 @@ jobs:
       - run:
           name: Export gcloud SDK path
           command: echo 'export PATH="/home/circleci/project/google-cloud-sdk/bin"' >> $BASH_ENV
+      
+      - run:
+          name: Update gcloud components
+          command: gcloud components update --quiet
 
       - run:
           name: Verify gcloud installation
