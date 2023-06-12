@@ -1,105 +1,144 @@
 version: 2.1
 
-jobs:
-  build_and_deploy:
+executors:
+  basic-executor:
     docker:
       - image: circleci/python:3.8
-    
-    environment:
-      GOOGLE_PROJECT_ID: 'cinema-389321'  
-      GCLOUD_SERVICE_ACCOUT: cinema-gke-deploy@cinema-389321.iam.gserviceaccount.com
 
+aliases:
+  - &source-install-path
+    run:
+      name: Export Path
+      command: |
+        source '/home/circleci/google-cloud-sdk/completion.bash.inc'
+        source '/home/circleci/google-cloud-sdk/path.bash.inc'
+        
+
+jobs:
+  build:
+    executor: basic-executor
     steps:
       - checkout
-
-      # 安装 gcloud SDK
       - run:
           name: Install gcloud SDK
           command: |
             curl https://sdk.cloud.google.com > install.sh
             bash install.sh --disable-prompts
-            source '/home/circleci/google-cloud-sdk/completion.bash.inc'
-            source '/home/circleci/google-cloud-sdk/path.bash.inc'
+      - *source-install-path
+      - run:
+          name: Show gcloud version
+          command: |
             gcloud version
-          # persist_to_workspace:
-          #   root: .
-          #   paths:
-          #     - $BASH_ENV
-            
-      # 配置 gcloud SDK
+
+  config:
+    executor: basic-executor
+    steps:
+      - checkout
+      - *source-install-path
       - run:
           name: Configure gcloud SDK
           command: |
-            source '/home/circleci/google-cloud-sdk/completion.bash.inc'
-            source '/home/circleci/google-cloud-sdk/path.bash.inc'
             gcloud auth activate-service-account --key-file=.circleci/service-account-key.json
             gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
-            
+
+  create-cluster:
+    executor: basic-executor
+    steps:
+      - checkout
+      - *source-install-path  
       - run:
           name: Check if cluster exists
           command: |
-            source '/home/circleci/google-cloud-sdk/completion.bash.inc'
-            source '/home/circleci/google-cloud-sdk/path.bash.inc'
-            gcloud container clusters describe cinema-cluster --zone us-central1-a
+            gcloud container clusters describe ${GKE_CLUSTER_NAME} --zone ${GKE_CLUSTER_ZONE}
             if [ $? -eq 0 ]; then
               echo "Cluster already exists, skipping cluster creation"
             else
               echo "Cluster does not exist, creating new cluster"
-              gcloud container clusters create cinema-cluster --zone us-central1-a --location-policy=BALANCED --no-enable-ip-alias --cluster-ipv4-cidr=10.0.0.0/16 --num-nodes=3 --disk-size=50GB
+              gcloud container clusters create ${GKE_CLUSTER_NAME} --zone ${GKE_CLUSTER_ZONE} --location-policy=BALANCED --no-enable-ip-alias --cluster-ipv4-cidr=10.0.0.0/16 --num-nodes=3 --disk-size=50GB
             fi
-      
+
+  connect-cluster:
+    executor: basic-executor
+    steps:
+      - checkout
+      - *source-install-path
       - run:
           name: Connet to cluster
           command: |
-            source '/home/circleci/google-cloud-sdk/completion.bash.inc'
-            source '/home/circleci/google-cloud-sdk/path.bash.inc'
             gcloud components install gke-gcloud-auth-plugin
             gcloud components install kubectl
-            gcloud container clusters get-credentials cinema-cluster --zone us-central1-a
-      
+            gcloud container clusters get-credentials ${GKE_CLUSTER_NAME} --zone ${GKE_CLUSTER_ZONE} 
+
+  pull-docker-image:
+    executor: basic-executor
+    steps:
+      - checkout
       - setup_remote_docker
+      - *source-install-path
       - run:
           name: Deploy Docker image
           command: |
-            source '/home/circleci/google-cloud-sdk/completion.bash.inc'
-            source '/home/circleci/google-cloud-sdk/path.bash.inc'
             docker login -u "${DOCKER_HUB_USER}" -p "${DOCKER_HUB_PASSWORD}"
             gcloud auth configure-docker
-            docker pull zhangyyamy/filmdb:dev-384
-            docker tag zhangyyamy/filmdb:dev-384 gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
-            docker push gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
+            docker pull ${DOCKER_IMAGE}
+            docker tag ${DOCKER_IMAGE} gcr.io/${GOOGLE_PROJECT_ID}/${DOCKER_IMAGE}
+            docker push gcr.io/${GOOGLE_PROJECT_ID}/${DOCKER_IMAGE}
+
+  cluster-deploy:
+    executor: basic-executor
+    steps:
+      - checkout
+      - *source-install-path
       - run:
           name: Check if deployment exists
           command: |
-            source '/home/circleci/google-cloud-sdk/completion.bash.inc'
-            source '/home/circleci/google-cloud-sdk/path.bash.inc'
-            if kubectl get deployment cinema-deploy; then
+            if kubectl get deployment ${GKE_CLUSTER_DEPLOY}; then
               echo "Deployment already exists, skipping deployment creation"
               exit 0
             else
               echo "Deployment does not exist, creating new deployment"
-              kubectl create deployment cinema-deploy --image=gcr.io/${GOOGLE_PROJECT_ID}/zhangyyamy/filmdb:dev-384
-              kubectl rollout status deployment/cinema-deploy
+              kubectl create deployment ${GKE_CLUSTER_DEPLOY} --image=gcr.io/${GOOGLE_PROJECT_ID}/${DOCKER_IMAGE}
+              kubectl rollout status deployment/${GKE_CLUSTER_DEPLOY}
             fi
 
+  cluster-service-deploy:
+    executor: basic-executor
+    steps:
+      - checkout
+      - *source-install-path
       - run:
           name: Check if service exists
           command: |
-            source '/home/circleci/google-cloud-sdk/completion.bash.inc'
-            source '/home/circleci/google-cloud-sdk/path.bash.inc'
-            if kubectl get service cinema-deploy >/dev/null 2>&1; then
+            if kubectl get service ${GKE_CLUSTER_DEPLOY} >/dev/null 2>&1; then
               echo "Service 'cinema-deploy' already exists, skipping service creation"
             else
-              kubectl expose deployment cinema-deploy --type=LoadBalancer --port 8080 --target-port 3000
+              kubectl expose deployment ${GKE_CLUSTER_DEPLOY} --type=LoadBalancer --port 8080 --target-port 3000
             fi
 
-            kubectl get services cinema-deploy
-            kubectl describe service cinema-deploy
+            kubectl get services ${GKE_CLUSTER_DEPLOY}
+            kubectl describe service ${GKE_CLUSTER_DEPLOY}
 
-            
+  workflows:
+    build_and_deploy:
+      jobs:
+        - build
+        - config: 
+            requires:
+              - build
+        - create-cluster: 
+            requires:
+              - config
+        - connect-cluster: 
+            requires:
+              - create-cluster
+        - pull-docker-image:
+            requires:
+              - connect-cluster
+        - cluster-deploy:
+            requires:
+              - pull-docker-image
+        - cluster-service-deploy:
+            requires:
+              - cluster-deploy
 
-workflows:
-  build_and_deploy:
-    jobs:
-      - build_and_deploy
       
