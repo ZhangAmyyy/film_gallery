@@ -118,27 +118,27 @@ jobs:
             kubectl get services ${GKE_CLUSTER_DEPLOY}
             kubectl describe service ${GKE_CLUSTER_DEPLOY}
 
-  workflows:
-    build_and_deploy:
-      jobs:
-        - build
-        - config: 
-            requires:
-              - build
-        - create-cluster: 
-            requires:
-              - config
-        - connect-cluster: 
-            requires:
-              - create-cluster
-        - pull-docker-image:
-            requires:
-              - connect-cluster
-        - cluster-deploy:
-            requires:
-              - pull-docker-image
-        - cluster-service-deploy:
-            requires:
-              - cluster-deploy
+workflows:
+  build_and_deploy:
+    jobs:
+      - build
+      - config: 
+          requires:
+            - build
+      - create-cluster: 
+          requires:
+            - config
+      - connect-cluster: 
+          requires:
+            - create-cluster
+      - pull-docker-image:
+          requires:
+            - connect-cluster
+      - cluster-deploy:
+          requires:
+            - pull-docker-image
+      - cluster-service-deploy:
+          requires:
+            - cluster-deploy
 
       
